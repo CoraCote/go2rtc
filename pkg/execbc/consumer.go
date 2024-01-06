@@ -1,4 +1,4 @@
-package outputbc
+package execbc
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ func (c *Client) AddTrack(media *core.Media, _ *core.Codec, track *core.Receiver
 	if c.sender == nil {
 		c.sender = core.NewSender(media, track.Codec)
 		c.sender.Handler = func(packet *rtp.Packet) {
-			c.pipe.Write(packet.Payload)
+			c.pipeCloser.Write(packet.Payload)
 
 			c.send += len(packet.Payload)
 		}
