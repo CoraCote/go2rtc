@@ -2,8 +2,6 @@
 
 package device
 
-// https://github.com/torvalds/linux/blob/master/include/uapi/linux/videodev2.h
-
 const (
 	VIDIOC_QUERYCAP = 0x80685600
 	VIDIOC_ENUM_FMT = 0xc0405602
@@ -32,122 +30,122 @@ const (
 	V4L2_MEMORY_MMAP            = 1
 )
 
-type v4l2_capability struct {
-	driver       [16]byte
-	card         [32]byte
-	bus_info     [32]byte
-	version      uint32
-	capabilities uint32
-	device_caps  uint32
-	reserved     [3]uint32
+type v4l2_capability struct { // size 104
+	driver       [16]byte  // offset 0, size 16
+	card         [32]byte  // offset 16, size 32
+	bus_info     [32]byte  // offset 48, size 32
+	version      uint32    // offset 80, size 4
+	capabilities uint32    // offset 84, size 4
+	device_caps  uint32    // offset 88, size 4
+	reserved     [3]uint32 // offset 92, size 12
 }
 
-type v4l2_format struct {
-	typ uint64
-	fmt v4l2_pix_format
+type v4l2_format struct { // size 208
+	typ uint32          // offset 0, size 4
+	_   [4]byte         // align
+	pix v4l2_pix_format // offset 8, size 48
+	_   [152]byte       // filler
 }
 
-type v4l2_pix_format struct {
-	width        uint32 // 0
-	height       uint32 // 4
-	pixelformat  uint32 // 8
-	field        uint32 // 12
-	bytesperline uint32 // 16
-	sizeimage    uint32 // 20
-	colorspace   uint32 // 24
-	priv         uint32 // 28
-	flags        uint32 // 32
-	ycbcr_enc    uint32 // 36
-	quantization uint32 // 40
-	xfer_func    uint32 // 44
-
-	_ [152]byte // 48
+type v4l2_pix_format struct { // size 48
+	width        uint32 // offset 0, size 4
+	height       uint32 // offset 4, size 4
+	pixelformat  uint32 // offset 8, size 4
+	field        uint32 // offset 12, size 4
+	bytesperline uint32 // offset 16, size 4
+	sizeimage    uint32 // offset 20, size 4
+	colorspace   uint32 // offset 24, size 4
+	priv         uint32 // offset 28, size 4
+	flags        uint32 // offset 32, size 4
+	ycbcr_enc    uint32 // offset 36, size 4
+	quantization uint32 // offset 40, size 4
+	xfer_func    uint32 // offset 44, size 4
 }
 
-type v4l2_streamparm struct {
-	typ     uint32
-	capture v4l2_captureparm
+type v4l2_streamparm struct { // size 204
+	typ     uint32           // offset 0, size 4
+	capture v4l2_captureparm // offset 4, size 40
+	_       [160]byte        // filler
 }
 
-type v4l2_captureparm struct {
-	capability   uint32     // 0
-	capturemode  uint32     // 4
-	timeperframe v4l2_fract // 8
-	extendedmode uint32     // 16
-	readbuffers  uint32     // 20
-
-	_ [176]byte // 24
+type v4l2_captureparm struct { // size 40
+	capability   uint32     // offset 0, size 4
+	capturemode  uint32     // offset 4, size 4
+	timeperframe v4l2_fract // offset 8, size 8
+	extendedmode uint32     // offset 16, size 4
+	readbuffers  uint32     // offset 20, size 4
+	reserved     [4]uint32  // offset 24, size 16
 }
 
-type v4l2_fract struct {
-	numerator   uint32
-	denominator uint32
+type v4l2_fract struct { // size 8
+	numerator   uint32 // offset 0, size 4
+	denominator uint32 // offset 4, size 4
 }
 
-type v4l2_requestbuffers struct {
-	count        uint32
-	typ          uint32
-	memory       uint32
-	capabilities uint32
-	flags        uint8
-	reserved     [3]uint8
+type v4l2_requestbuffers struct { // size 20
+	count        uint32   // offset 0, size 4
+	typ          uint32   // offset 4, size 4
+	memory       uint32   // offset 8, size 4
+	capabilities uint32   // offset 12, size 4
+	flags        uint8    // offset 16, size 1
+	reserved     [3]uint8 // offset 17, size 3
 }
 
-type v4l2_buffer struct {
-	index     uint32        // 0
-	typ       uint32        // 4
-	bytesused uint32        // 8
-	flags     uint32        // 12
-	field     uint32        // 16
-	_         [20]byte      // 20
-	timecode  v4l2_timecode // 40
-	sequence  uint32        // 56
-	memory    uint32        // 60
-	offset    uint32        // 64
-	_         [4]byte       // 68
-	length    uint32        // 72
-	_         [12]byte      // 76
+type v4l2_buffer struct { // size 88
+	index     uint32        // offset 0, size 4
+	typ       uint32        // offset 4, size 4
+	bytesused uint32        // offset 8, size 4
+	flags     uint32        // offset 12, size 4
+	field     uint32        // offset 16, size 4
+	_         [20]byte      // align
+	timecode  v4l2_timecode // offset 40, size 16
+	sequence  uint32        // offset 56, size 4
+	memory    uint32        // offset 60, size 4
+	offset    uint32        // offset 64, size 4
+	_         [4]byte       // align
+	length    uint32        // offset 72, size 4
+	_         [12]byte      // filler
 }
 
-type v4l2_timecode struct {
-	typ      uint32
-	flags    uint32
-	frames   uint8
-	seconds  uint8
-	minutes  uint8
-	hours    uint8
-	userbits [4]uint8
+type v4l2_timecode struct { // size 16
+	typ      uint32   // offset 0, size 4
+	flags    uint32   // offset 4, size 4
+	frames   uint8    // offset 8, size 1
+	seconds  uint8    // offset 9, size 1
+	minutes  uint8    // offset 10, size 1
+	hours    uint8    // offset 11, size 1
+	userbits [4]uint8 // offset 12, size 4
 }
 
-type v4l2_fmtdesc struct {
-	index       uint32
-	typ         uint32
-	flags       uint32
-	description [32]byte
-	pixelformat uint32
-	mbus_code   uint32
-	reserved    [3]uint32
+type v4l2_fmtdesc struct { // size 64
+	index       uint32    // offset 0, size 4
+	typ         uint32    // offset 4, size 4
+	flags       uint32    // offset 8, size 4
+	description [32]byte  // offset 12, size 32
+	pixelformat uint32    // offset 44, size 4
+	mbus_code   uint32    // offset 48, size 4
+	reserved    [3]uint32 // offset 52, size 12
 }
 
-type v4l2_frmsizeenum struct {
-	index        uint32                // 0
-	pixel_format uint32                // 4
-	typ          uint32                // 8
-	discrete     v4l2_frmsize_discrete // 12
-	_            [24]byte
+type v4l2_frmsizeenum struct { // size 44
+	index        uint32                // offset 0, size 4
+	pixel_format uint32                // offset 4, size 4
+	typ          uint32                // offset 8, size 4
+	discrete     v4l2_frmsize_discrete // offset 12, size 8
+	_            [24]byte              // filler
 }
 
-type v4l2_frmsize_discrete struct {
-	width  uint32
-	height uint32
+type v4l2_frmsize_discrete struct { // size 8
+	width  uint32 // offset 0, size 4
+	height uint32 // offset 4, size 4
 }
 
-type v4l2_frmivalenum struct {
-	index        uint32
-	pixel_format uint32
-	width        uint32
-	height       uint32
-	typ          uint32
-	discrete     v4l2_fract
-	_            [24]byte
+type v4l2_frmivalenum struct { // size 52
+	index        uint32     // offset 0, size 4
+	pixel_format uint32     // offset 4, size 4
+	width        uint32     // offset 8, size 4
+	height       uint32     // offset 12, size 4
+	typ          uint32     // offset 16, size 4
+	discrete     v4l2_fract // offset 20, size 8
+	_            [24]byte   // filler
 }
